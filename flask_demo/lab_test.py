@@ -14,6 +14,21 @@ password= 'password'
 #Fake channel
 channel ="DPR9WUTEM"
 
+#Post new message to slack channel in question
+def post_to_slack(message, channel, token):
+	slack_token = token
+	client = slack.WebClient(token=slack_token)
+	client.chat_postMessage(
+	channel=channel,
+	text=message)
+
+#Pull last 1 message from slack channel in question
+def get_last_message(token, channel):
+	url= 'https://slack.com/api/conversations.history?token={}&channel={}&limit=1&pretty=1'.format(token, channel)
+	r=requests.get(url)
+	all_respoce = r.json()
+	last_message = all_respoce['messages'][0]['text']
+	return last_message
 
 		  
 def check_lab():
@@ -58,27 +73,6 @@ def check_lab():
 		
 		
 
-def post_to_slack(message, channel, token):
-	
-	slack_token = token
-	client = slack.WebClient(token=slack_token)
-	
-	client.chat_postMessage(
-	channel=channel,
-	text=message)
-
-
-
-
-#post_to_slack(message, channel, token)
-
-
-def get_last_message(token, channel):
-	url= 'https://slack.com/api/conversations.history?token={}&channel={}&limit=1&pretty=1'.format(token, channel)
-	r=requests.get(url)
-	all_respoce = r.json()
-	last_message = all_respoce['messages'][0]['text']
-	return last_message
 
 
 functions=['say hi', 'check lab']
